@@ -1,2 +1,143 @@
 # rtfmbro-mcp
-A MCP server for just-in-time, version-controlled documentation fetching
+
+> A MCP server for just-in-time, version-controlled documentation fetching.
+
+## Overview
+
+rtfmbro is a Model Context Protocol (MCP) server that provides real-time, version-aware documentation fetching for packages across multiple ecosystems. It bridges the gap between AI agents and accurate, up-to-date package documentation by fetching docs directly from GitHub repositories at the exact version your project uses.
+
+## Supported Ecosystems
+
+| Ecosystem | Registry | Status |
+|-----------|----------|--------|
+| **Python** | PyPI | ✅ Full Support |
+| **Node.js** | npm | ✅ Full Support |
+| **Swift** | SPM | 🚧 Alpha |
+
+## Why rtfmbro?
+
+### The Problem
+- **Stale Documentation**: AI models often rely on outdated training data about packages
+- **Missing Context**: Source code in `node_modules` etc. lacks high-level documentation, browsing it is usually token-consuming and inefficient
+- **Version Mismatches**: Generic documentation doesn't match your specific package version, especially for legacy projects or brand new packages
+
+### The Solution
+rtfmbro tries to solve these issues by:
+
+1. **Version-Precise Fetching**: Retrieves documentation from the exact git tag/commit that matches your lockfile
+2. **Comprehensive Coverage**: Extracts all documentation files (`.md`, `.mdx`, `.txt`, `.rst`, `.html`) from the repository
+3. **Intelligent Caching**: SHA-based currency checking ensures docs stay fresh without unnecessary re-fetching
+4. **Agent Integration**: Seamlessly integrates with AI coding assistants via the Model Context Protocol
+5. **Great DX**: Zero seting up for developers, just add the server to your MCP configuration, instructions and start fetching docs
+
+### MCP Tools
+
+The server exposes three primary tools to AI agents:
+
+| Tool | Purpose | Parameters | Returns |
+|------|---------|------------|---------|
+| `get_readme` | Fetches and returns the README file for a specific package version | `package`, `version`, `ecosystem` | README content as string |
+| `get_documentation_tree` | Generates a comprehensive folder structure of all documentation files | `package`, `version`, `ecosystem` | Tree structure as string |
+| `read_files` | Reads specific documentation files with optional line range slicing | `package`, `version`, `ecosystem`, `requests[]` | Dictionary mapping paths to content |
+
+## Installation & Setup
+
+### Quick Start
+
+Add the remote server to your MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "rtfmbro": {
+      "type": "http", 
+      "url": "https://rtfmbro.smolosoft.dev/mcp/"
+    }
+  }
+}
+```
+
+### Agent Integration
+
+Add this policy to your agent instructions (e.g., `.github/copilot-instructions.md`):
+
+```markdown
+## Package Documentation Policy
+
+* Before using any package, module, or library, ALWAYS consult its documentation — your internal knowledge may be outdated and could cause errors or failures.
+* Don't assume anything about the package's functionality, usage, or configuration without verifying it against the official documentation.
+* If you are unsure about a user's request that may involve a package, module, or library, **ALWAYS** refer to the documentation first or ask the user to provide the package name and version.
+
+### Workflow
+1. **Identify** the package name and EXACT pinned version (e.g., "==1.0.5") from the project's lock file (uv.lock, package-lock.json, etc.)
+2. **Fetch documentation** using the available tools:
+   - `get_readme` - Get package README
+   - `get_documentation_tree` - Browse available docs
+   - `read_files` - Read specific documentation files
+3. **Review** the documentation to understand:
+   - Core functionality and API surface
+   - Usage patterns and best practices  
+   - Breaking changes and migration guides
+   - Configuration options and defaults
+4. **Apply** documentation insights to provide accurate, version-specific guidance
+```
+
+## How It Works
+
+### Documentation Workflow
+
+1. **Registry Lookup**: Queries the package registry (PyPI, npm, etc.) for metadata
+2. **GitHub Discovery**: Extracts the GitHub repository URL from package metadata
+3. **Version Resolution**: Fetches available git tags and matches them against your semantic version
+4. **Smart Fetching**: Clones the repository at the exact matched tag/commit
+5. **Content Filtering**: Extracts only documentation files, removing source code and build artifacts
+6. **Caching & Currency**: Stores results with SHA-based currency checking for efficient re-access
+
+### Caching Strategy
+
+- **SHA-Based Validation**: Compares current repository commit SHA with cached version
+- **Automatic Invalidation**: Re-fetches documentation when new commits are detected
+- **Persistent Storage**: Maintains local cache to avoid redundant GitHub API calls
+- **Metadata Preservation**: Stores documentation tree structure for fast browsing
+
+## Prerequisites
+
+- Package must be published to a supported registry (PyPI, npm)
+- Package metadata must contain a valid GitHub repository link
+- Repository must use git tags for version management
+- Documentation files must be present in the repository (not just generated sites)
+
+## Roadmap
+
+### Near Term
+- [ ] **Provide rtfmbro source code**: Open source the server codebase
+- [ ] **Public docker image**: Create a public Docker image for easy deployment
+- [ ] **Private repo support**: Allow authenticated access to private repositories
+- [ ] **Add Tests**: Implement unit and integration tests for core functionality
+- [ ] **Enhanced Python Support**: Include pydocs and docstring extraction
+- [ ] **Search Capabilities**: Search across documentation corpus
+
+### Future Ecosystems / Languages / Registries
+- [ ] **Rust** ([crates.io](https://crates.io/))
+- [ ] **Go** ([pkg.go.dev](https://pkg.go.dev/))
+- [ ] **Java/Kotlin** ([Maven Central](https://central.sonatype.com/))
+- [ ] **C#/.NET** ([NuGet](https://www.nuget.org/))
+- [ ] **Ruby** ([RubyGems](https://rubygems.org/))
+
+### Source code hosting and repository support:
+- [x] **GitHub**: Support for GitHub repositories
+- [ ] **Gitlab**: Support for GitLab repositories
+- [ ] **Bitbucket**: Support for Bitbucket repositories
+- [ ] **Launchpad**: Support for Launchpad repositories
+
+## Known Issues
+
+- Some packages may have documentation in separate standalone repos
+- Large repositories may take a bit of time to clone and process initially
+
+## Similar / Additive Projects
+
+- **[mcp-package-docs](https://github.com/sammcj/mcp-package-docs)**: Another MCP server for package documentation, focusing on documentation extraction, LSP servers, etc. May be a great supplement to rtfmbro.
+- **[rust-docs-mcp-server](https://github.com/Govcraft/rust-docs-mcp-server)**: MCP server for Rust documentation, focused on Rust-specific features and documentation formats.
+- **[mcp-ragdocs](https://github.com/qpd-v/mcp-ragdocs)**: MCP server for RAG (Retrieval-Augmented Generation) documentation, aimed at improving the documentation experience for AI models.
+- **[godoc-mcp](https://github.com/mrjoshuak/godoc-mcp)**: MCP server for Go documentation, providing access to Go package documentation via the Model Context Protocol.
