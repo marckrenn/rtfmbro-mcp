@@ -1,6 +1,6 @@
 # rtfmbro-mcp
 
-> A MCP server for just-in-time, version-controlled documentation fetching.
+> rtfmbro provides always-up-to-date, version-specific package documentation as context for coding agents
 
 https://github.com/user-attachments/assets/dbe0b3b4-a42c-4e91-8bcd-a94d430ef0b8
 
