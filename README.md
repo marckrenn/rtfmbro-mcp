@@ -2,6 +2,10 @@
 
 > A MCP server for just-in-time, version-controlled documentation fetching.
 
+https://github.com/user-attachments/assets/dbe0b3b4-a42c-4e91-8bcd-a94d430ef0b8
+
+Demonstration of rtfmbro in use, fetching a specific version (3.1.1) of Flask's [readme](https://github.com/pallets/flask/blob/3.1.1/README.md) and [docs](https://github.com/pallets/flask/tree/3.1.1/docs).
+
 ## Overview
 
 rtfmbro is a Model Context Protocol (MCP) server that provides real-time, version-aware documentation fetching for packages across multiple ecosystems. It bridges the gap between AI agents and accurate, up-to-date package documentation by fetching docs directly from GitHub repositories at the exact version your project uses.
