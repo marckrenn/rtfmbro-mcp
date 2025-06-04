@@ -1,6 +1,6 @@
 # rtfmbro-mcp
 
-> rtfmbro provides always-up-to-date, version-specific package documentation as context for coding agents
+> rtfmbro provides always-up-to-date, version-specific package documentation as context for coding agents. An alternative to [context7](https://github.com/upstash/context7).
 
 https://github.com/user-attachments/assets/dbe0b3b4-a42c-4e91-8bcd-a94d430ef0b8
 
@@ -52,11 +52,9 @@ Add the remote server to your MCP configuration:
 
 ```json
 {
-  "mcpServers": {
-    "rtfmbro": {
-      "type": "http", 
-      "url": "https://rtfmbro.smolosoft.dev/mcp/"
-    }
+  "rtfmbro": {
+    "type": "http", 
+    "url": "https://rtfmbro.smolosoft.dev/mcp/"
   }
 }
 ```
@@ -116,6 +114,7 @@ Add this policy to your agent instructions (e.g., `.github/copilot-instructions.
 ### Near Term
 - [ ] **Provide rtfmbro source code**: Open source the server codebase
 - [ ] **Public docker image**: Create a public Docker image for easy deployment
+- [ ] **Ecosystem independent fallback**: Implement a fallback mechanism for unsupported ecosystems
 - [ ] **Private repo support**: Allow authenticated access to private repositories
 - [ ] **Add Tests**: Implement unit and integration tests for core functionality
 - [ ] **Enhanced Python Support**: Include pydocs and docstring extraction
@@ -145,3 +144,13 @@ Add this policy to your agent instructions (e.g., `.github/copilot-instructions.
 - **[rust-docs-mcp-server](https://github.com/Govcraft/rust-docs-mcp-server)**: MCP server for Rust documentation, focused on Rust-specific features and documentation formats.
 - **[mcp-ragdocs](https://github.com/qpd-v/mcp-ragdocs)**: MCP server for RAG (Retrieval-Augmented Generation) documentation, aimed at improving the documentation experience for AI models.
 - **[godoc-mcp](https://github.com/mrjoshuak/godoc-mcp)**: MCP server for Go documentation, providing access to Go package documentation via the Model Context Protocol.
+- **[context7](https://github.com/upstash/context7)**: Alternative to rtfmbro
+
+### Differences between **context7** and **rtfmbro**
+|Aspect|context7|rtfmbro|
+|------|--------|-------|
+| **Actuality** | Scrapes documentation ahead-of-time at intransparent intervals or upon user trigger. As of writing, the "latest" Next.js docs are already 2 days old.| Fetches documentation just-in-time, ensuring it's always up-to-date. |
+| **Version-specific docs** | Theoretically allows scraping older versions (useful for legacy or longtime projects), but the process is complicated, limiting practical availability effectively to latest versions. | Fetches older documentation just-in-time, and always remains current, identical to latest docs. |
+| **Search strategy** | Uses either A) optionally token-limited RAG search to filter/preprocess docs which can be hit-or-miss, or B) dumps all content into LLM's context, resulting in excessive token-use. | Employs agentic discovery ([as used by Claude Code itself](https://x.com/pashmerepat/status/1926717705660375463)) |
+| **Developer Experience** | Requires explicitly mention of context7 in every prompt. | Operates via defined rules/instructions, auto-selecting appropriate package name/version from lock file ("set and forget"). |
+| **Support** | Language/ecosystem independent. | Currently language/ecosystem-specific; planned additional languages/ecosystems and language-independent fallback mechanism soon. |
