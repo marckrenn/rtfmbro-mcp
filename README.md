@@ -17,6 +17,7 @@ rtfmbro is a Model Context Protocol (MCP) server that provides real-time, versio
 | **Python** | PyPI | ✅ Full Support |
 | **Node.js** | npm | ✅ Full Support |
 | **Swift** | SPM | 🚧 Alpha |
+| **GitHub** | Direct | ⚠️ Fallback |
 
 ## Why rtfmbro?
 
@@ -36,13 +37,14 @@ rtfmbro tries to solve these issues by:
 
 ### MCP Tools
 
-The server exposes three primary tools to AI agents:
+The server exposes four primary tools to AI agents:
 
 | Tool | Purpose | Parameters | Returns |
 |------|---------|------------|---------|
 | `get_readme` | Fetches and returns the README file for a specific package version | `package`, `version`, `ecosystem` | README content as string |
 | `get_documentation_tree` | Generates a comprehensive folder structure of all documentation files | `package`, `version`, `ecosystem` | Tree structure as string |
 | `read_files` | Reads specific documentation files with optional line range slicing | `package`, `version`, `ecosystem`, `requests[]` | Dictionary mapping paths to content |
+| `search_github_repositories` | Searches for GitHub repositories using the GitHub Search API | `query`, `sort`, `order`, `per_page` | Formatted repository search results |
 
 ## Installation & Setup
 
@@ -76,12 +78,19 @@ Add this policy to your agent instructions (e.g., `.github/copilot-instructions.
    - `get_readme` - Get package README
    - `get_documentation_tree` - Browse available docs
    - `read_files` - Read specific documentation files
+   - `search_github_repositories` - Search for Github packages and repositories by topic, language, or keywords
 3. **Review** the documentation to understand:
    - Core functionality and API surface
    - Usage patterns and best practices  
    - Breaking changes and migration guides
    - Configuration options and defaults
 4. **Apply** documentation insights to provide accurate, version-specific guidance
+
+**Ecosystem Selection:**
+- Use `pypi` for Python packages
+- Use `npm` for Node.js packages  
+- Use `spm` for Swift packages
+- Use `gh` only as a fallback for languages not supported by the above registries (package name must be in 'owner/repo' format) or if you're unsure about the package's ecosystem. Also use `gh` when you don't find the package in the lock file.
 ```
 
 ## How It Works
@@ -112,9 +121,9 @@ Add this policy to your agent instructions (e.g., `.github/copilot-instructions.
 ## Roadmap
 
 ### Near Term
+- [x] **Ecosystem independent fallback**: Implement a fallback mechanism for unsupported ecosystems
 - [ ] **Provide rtfmbro source code**: Open source the server codebase
 - [ ] **Public docker image**: Create a public Docker image for easy deployment
-- [ ] **Ecosystem independent fallback**: Implement a fallback mechanism for unsupported ecosystems
 - [ ] **Private repo support**: Allow authenticated access to private repositories
 - [ ] **Add Tests**: Implement unit and integration tests for core functionality
 - [ ] **Enhanced Python Support**: Include pydocs and docstring extraction
