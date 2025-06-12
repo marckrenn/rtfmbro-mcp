@@ -56,7 +56,7 @@ The server exposes four primary tools to AI agents:
 claude mcp add-json rtfmbro '{ "type": "http",  "url": "https://rtfmbro.smolosoft.dev/mcp/" }'
 ```
 
-#### Claude Desktop / VS Code etc.
+#### Claude Desktop / VS Code / etc.
 
 Add the remote server to your MCP configuration:
 
@@ -69,14 +69,18 @@ Add the remote server to your MCP configuration:
 }
 ```
 
+#### Cursor
+
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=rtfmbro&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vcnRmbWJyby5zbW9sb3NvZnQuZGV2L21jcC8ifQ%3D%3D)
+
 ### Agent Integration
 
-To integrate rtfmbro with your AI coding assistant, copy the appropriate instruction file to your project:
+To truly integrate rtfmbro with your AI coding agent of choice, copy the appropriate meta-instruction file to your project:
 
 - **GitHub Copilot**: Copy [`.github/copilot-instructions.md`](.github/copilot-instructions.md) to your project
 - **Claude Code**: Copy [`CLAUDE.md`](CLAUDE.md) to your project root
-- **Cursor**: Copy [`.cursor/rules`](.cursor/rules) to your project
-- **Other agents**: Adapt the instructions from any of the files above to your agent's format
+- **Cursor**: Copy [`.cursor/rules`](.cursor/rules) to your project root
+- **Other agents**: Adapt the instructions from either file above to your agent's format
 
 ## How It Works
 
