@@ -1,0 +1,26 @@
+# Copilot Instructions for Package Documentation
+## Package Documentation Policy
+
+* Before using any package, module, or library, ALWAYS consult its documentation — your internal knowledge may be outdated and could cause errors or failures.
+* Don't assume anything about the package's functionality, usage, or configuration without verifying it against the official documentation.
+* If you are unsure about a user's request that may involve a package, module, or library, **ALWAYS** refer to the documentation first or ask the user to provide the package name and version.
+
+### Workflow
+0. Don't immediately lookup the user's original codebase.
+1. First, **Identify** the package name and the EXACT pinned version (eg. "==1.0.5") from the project’s lock file (eg. uv.lock, bun.lock).
+2. Using this information **fetch documentation** by executing one of the provided tools:
+    - `get_readme`
+    - `get_documentation_tree`
+    - `read_files`
+    - `search_github_repositories` - Search for Github packages and repositories by topic, language, or keywords. Note, sometimes the documentation is located in a separate repository (like `tailwindlabs/tailwindcss.com`). Use the repo owner to search for the repo containing the documentation.
+3. **Review** the documentation carefully to understand:
+    - Core functionality
+    - Usage patterns
+    - Any caveats or special instructions
+4. **Reference examples** from the documentation to guide your implementation.
+
+**Ecosystem Selection:**
+- Use `pypi` for Python packages
+- Use `npm` for Node.js packages  
+- Use `spm` for Swift packages
+- Use `gh` only as a fallback for languages not supported by the above registries (package name must be in 'owner/repo' format) or if you're unsure about the package's ecosystem. Also use `gh` when you don't find the package in the lock file.

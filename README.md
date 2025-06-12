@@ -50,6 +50,14 @@ The server exposes four primary tools to AI agents:
 
 ### Quick Start
 
+#### Claude Code
+
+```bash
+claude mcp add-json rtfmbro '{ "type": "http",  "url": "https://rtfmbro.smolosoft.dev/mcp/" }'
+```
+
+#### Claude Desktop / VS Code etc.
+
 Add the remote server to your MCP configuration:
 
 ```json
@@ -63,35 +71,12 @@ Add the remote server to your MCP configuration:
 
 ### Agent Integration
 
-Add this policy to your agent instructions (e.g., `.github/copilot-instructions.md`):
+To integrate rtfmbro with your AI coding assistant, copy the appropriate instruction file to your project:
 
-```markdown
-## Package Documentation Policy
-
-* Before using any package, module, or library, ALWAYS consult its documentation — your internal knowledge may be outdated and could cause errors or failures.
-* Don't assume anything about the package's functionality, usage, or configuration without verifying it against the official documentation.
-* If you are unsure about a user's request that may involve a package, module, or library, **ALWAYS** refer to the documentation first or ask the user to provide the package name and version.
-
-### Workflow
-1. **Identify** the package name and EXACT pinned version (e.g., "==1.0.5") from the project's lock file (uv.lock, package-lock.json, etc.)
-2. **Fetch documentation** using the available tools:
-   - `get_readme` - Get package README
-   - `get_documentation_tree` - Browse available docs
-   - `read_files` - Read specific documentation files
-   - `search_github_repositories` - Search for Github packages and repositories by topic, language, or keywords
-3. **Review** the documentation to understand:
-   - Core functionality and API surface
-   - Usage patterns and best practices  
-   - Breaking changes and migration guides
-   - Configuration options and defaults
-4. **Apply** documentation insights to provide accurate, version-specific guidance
-
-**Ecosystem Selection:**
-- Use `pypi` for Python packages
-- Use `npm` for Node.js packages  
-- Use `spm` for Swift packages
-- Use `gh` only as a fallback for languages not supported by the above registries (package name must be in 'owner/repo' format) or if you're unsure about the package's ecosystem. Also use `gh` when you don't find the package in the lock file.
-```
+- **GitHub Copilot**: Copy [`.github/copilot-instructions.md`](.github/copilot-instructions.md) to your project
+- **Claude Code**: Copy [`CLAUDE.md`](CLAUDE.md) to your project root
+- **Cursor**: Copy [`.cursor/rules`](.cursor/rules) to your project
+- **Other agents**: Adapt the instructions from any of the files above to your agent's format
 
 ## How It Works
 
